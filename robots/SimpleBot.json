@@ -1,0 +1,281 @@
+{
+  "name": "SimpleBot",
+  "links": [
+    {
+      "name": "base",
+      "visuals": [
+        {
+          "geometry": {
+            "type": "box",
+            "size": [0.1, 0.1, 0.05]
+          },
+          "material": {
+            "name": "",
+            "color": [0.0, 0.15294, 0.29804, 1.0]
+          },
+          "origin": {
+            "xyz": [-0.05, -0.05, 0],
+            "rpy": [0, 0, 0]
+          }
+        }
+      ]
+    },
+    {
+      "name": "torso",
+      "visuals": [
+        {
+          "geometry": {
+            "type": "box",
+            "size": [0.075, 0.075, 0.4]
+          },
+          "material": {
+            "name": "",
+            "color": [1.0, 0.79608, 0.01961, 1.0]
+          },
+          "origin": {
+            "xyz": [-0.0375, -0.0375, 0.05],
+            "rpy": [0, 0, 0]
+          }
+        }
+      ]
+    },
+    {
+      "name": "upper_arm",
+      "visuals": [
+        {
+          "geometry": {
+            "type": "box",
+            "size": [0.2, 0.02, 0.02]
+          },
+          "material": {
+            "name": "",
+            "color": [0.0, 0.15294, 0.29804, 1.0]
+          },
+          "origin": {
+            "xyz": [0, -0.01, 0],
+            "rpy": [0, 0, 0]
+          }
+        }
+      ]
+    },
+    {
+      "name": "forearm",
+      "visuals": [
+        {
+          "geometry": {
+            "type": "box",
+            "size": [0.1, 0.02, 0.02]
+          },
+          "material": {
+            "name": "",
+            "color": [0.0, 0.15294, 0.29804, 1.0]
+          },
+          "origin": {
+            "xyz": [0, -0.01, 0],
+            "rpy": [0, 0, 0]
+          }
+        }
+      ]
+    },
+    {
+      "name": "tool",
+      "visuals": [
+        {
+          "geometry": {
+            "type": "cylinder",
+            "length": 0.05,
+            "radius": 0.005
+          },
+          "material": {
+            "name": "",
+            "color": [1.0, 0.79608, 0.01961, 1.0]
+          },
+          "origin": {
+            "xyz": [0, 0, 0.01],
+            "rpy": [0, 1.5708, 0]
+          }
+        }
+      ]
+    },
+    {
+      "name": "eyeball_left",
+      "visuals": [
+        {
+          "geometry": {
+            "type": "sphere",
+            "radius": 0.02
+          },
+          "material": {
+            "name": "",
+            "color": [1.0, 1.0, 1.0, 1.0]
+          }
+        }
+      ]
+    },
+    {
+      "name": "eyeball_right",
+      "visuals": [
+        {
+          "geometry": {
+            "type": "sphere",
+            "radius": 0.02
+          },
+          "material": {
+            "name": "",
+            "color": [1.0, 1.0, 1.0, 1.0]
+          }
+        }
+      ]
+    },
+    {
+      "name": "pupil_left",
+      "visuals": [
+        {
+          "geometry": {
+            "type": "sphere",
+            "radius": 0.01
+          },
+          "material": {
+            "name": "",
+            "color": [0.0, 0.0, 0.0, 1.0]
+          },
+          "origin": {
+            "xyz": [0, -0.015, 0],
+            "rpy": [0, 0, 0]
+          }
+        }
+      ]
+    },
+    {
+      "name": "pupil_right",
+      "visuals": [
+        {
+          "geometry": {
+            "type": "sphere",
+            "radius": 0.01
+          },
+          "material": {
+            "name": "",
+            "color": [0.0, 0.0, 0.0, 1.0]
+          },
+          "origin": {
+            "xyz": [0, -0.015, 0],
+            "rpy": [0, 0, 0]
+          }
+        }
+      ]
+    }
+  ],
+  "joints": [
+    {
+      "name": "waist",
+      "parent": "base",
+      "child": "torso",
+      "type": "revolute",
+      "axis": [0, 0, 1],
+      "limits": {
+        "velocity": 100.0,
+        "effort": 1000.0,
+        "lower": -3.1415,
+        "upper": 3.1415
+      }
+    },
+    {
+      "name": "shoulder",
+      "parent": "torso",
+      "child": "upper_arm",
+      "type": "revolute",
+      "axis": [0, 1, 0],
+      "origin": {
+        "xyz": [0.0375, 0, 0.3],
+        "rpy": [0, 0, 0]
+      },
+      "limits": {
+        "velocity": 100.0,
+        "effort": 1000.0,
+        "lower": -1.5708,
+        "upper": 1.5708
+      }
+    },
+    {
+      "name": "elbow",
+      "parent": "upper_arm",
+      "child": "forearm",
+      "type": "revolute",
+      "axis": [0, 1, 0],
+      "origin": {
+        "xyz": [0.2, 0, 0],
+        "rpy": [0, 0, 0]
+      },
+      "limits": {
+        "velocity": 100.0,
+        "effort": 1000.0,
+        "lower": -1.5708,
+        "upper": 1.5708
+      }
+    },
+    {
+      "name": "wrist",
+      "parent": "forearm",
+      "child": "tool",
+      "type": "prismatic",
+      "axis": [1, 0, 0],
+      "origin": {
+        "xyz": [0.1, 0, 0],
+        "rpy": [0, 0, 0]
+      },
+      "limits": {
+        "velocity": 100.0,
+        "effort": 1000.0,
+        "lower": 0,
+        "upper": 0.025
+      }
+    },
+    {
+      "name": "eye_socket_left",
+      "parent": "torso",
+      "child": "eyeball_left",
+      "type": "fixed",
+      "origin": {
+        "xyz": [0.0375, -0.0375, 0.45],
+        "rpy": [0, 0, 0]
+      }
+    },
+    {
+      "name": "eye_socket_right",
+      "parent": "torso",
+      "child": "eyeball_right",
+      "type": "fixed",
+      "origin": {
+        "xyz": [-0.0375, -0.0375, 0.45],
+        "rpy": [0, 0, 0]
+      }
+    },
+    {
+      "name": "eye_lens_left",
+      "parent": "eyeball_left",
+      "child": "pupil_left",
+      "type": "revolute",
+      "axis": [0, 0, 1],
+      "limits": {
+        "velocity": 100.0,
+        "effort": 1000.0,
+        "lower": -1,
+        "upper": 1
+      }
+    },
+    {
+      "name": "eye_lens_right",
+      "parent": "eyeball_right",
+      "child": "pupil_right",
+      "type": "revolute",
+      "axis": [1, 0, 0],
+      "limits": {
+        "velocity": 100.0,
+        "effort": 1000.0,
+        "lower": -1,
+        "upper": 1
+      }
+    }
+  ]
+}

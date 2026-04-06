@@ -1,0 +1,471 @@
+{
+  "name": "spot",
+  "links": [
+    {
+      "name": "base",
+      "visuals": [
+        {
+          "geometry": {
+            "type": "mesh",
+            "filename": "spot/base.obj",
+            "scale": [1, 1, 1]
+          },
+          "origin": {
+            "xyz": [0.0, 0.0, 0.0],
+            "rpy": [0.0, 0.0, 0.0]
+          },
+          "material": {
+            "name": "base",
+            "color": [1.0, 0.8431, 0.0, 1.0]
+          }
+        }
+      ]
+    },
+    {
+      "name": "fl.hip",
+      "visuals": [
+        {
+          "geometry": {
+            "type": "mesh",
+            "filename": "spot/fl.hip.obj",
+            "scale": [1, 1, 1]
+          },
+          "origin": {
+            "xyz": [0.0, 0.0, 0.0],
+            "rpy": [0.0, 0.0, 0.0]
+          },
+          "material": {
+            "name": "fl.hip",
+            "color": [0.2, 0.2, 0.2, 1.0]
+          }
+        }
+      ]
+    },
+    {
+      "name": "fl.uleg",
+      "visuals": [
+        {
+          "geometry": {
+            "type": "mesh",
+            "filename": "spot/fl.uleg.obj",
+            "scale": [1, 1, 1]
+          },
+          "origin": {
+            "xyz": [0.0, 0.0, 0.0],
+            "rpy": [0.0, 0.0, 0.0]
+          },
+          "material": {
+            "name": "fl.uleg",
+            "color": [1.0, 0.8431, 0.0, 1.0]
+          }
+        }
+      ]
+    },
+    {
+      "name": "fl.lleg",
+      "visuals": [
+        {
+          "geometry": {
+            "type": "mesh",
+            "filename": "spot/fl.lleg.obj",
+            "scale": [1, 1, 1]
+          },
+          "origin": {
+            "xyz": [0.0, 0.0, 0.0],
+            "rpy": [0.0, 0.0, 0.0]
+          },
+          "material": {
+            "name": "fl.lleg",
+            "color": [0.2, 0.2, 0.2, 1.0]
+          }
+        }
+      ]
+    },
+    {
+      "name": "fr.hip",
+      "visuals": [
+        {
+          "geometry": {
+            "type": "mesh",
+            "filename": "spot/fr.hip.obj",
+            "scale": [1, 1, 1]
+          },
+          "origin": {
+            "xyz": [0.0, 0.0, 0.0],
+            "rpy": [0.0, 0.0, 0.0]
+          },
+          "material": {
+            "name": "fr.hip",
+            "color": [0.2, 0.2, 0.2, 1.0]
+          }
+        }
+      ]
+    },
+    {
+      "name": "fr.uleg",
+      "visuals": [
+        {
+          "geometry": {
+            "type": "mesh",
+            "filename": "spot/fr.uleg.obj",
+            "scale": [1, 1, 1]
+          },
+          "origin": {
+            "xyz": [0.0, 0.0, 0.0],
+            "rpy": [0.0, 0.0, 0.0]
+          },
+          "material": {
+            "name": "fr.uleg",
+            "color": [1.0, 0.8431, 0.0, 1.0]
+          }
+        }
+      ]
+    },
+    {
+      "name": "fr.lleg",
+      "visuals": [
+        {
+          "geometry": {
+            "type": "mesh",
+            "filename": "spot/fr.lleg.obj",
+            "scale": [1, 1, 1]
+          },
+          "origin": {
+            "xyz": [0.0, 0.0, 0.0],
+            "rpy": [0.0, 0.0, 0.0]
+          },
+          "material": {
+            "name": "fr.lleg",
+            "color": [0.2, 0.2, 0.2, 1.0]
+          }
+        }
+      ]
+    },
+    {
+      "name": "hl.hip",
+      "visuals": [
+        {
+          "geometry": {
+            "type": "mesh",
+            "filename": "spot/hl.hip.obj",
+            "scale": [1, 1, 1]
+          },
+          "origin": {
+            "xyz": [0.0, 0.0, 0.0],
+            "rpy": [0.0, 0.0, 0.0]
+          },
+          "material": {
+            "name": "hl.hip",
+            "color": [0.2, 0.2, 0.2, 1.0]
+          }
+        }
+      ]
+    },
+    {
+      "name": "hl.uleg",
+      "visuals": [
+        {
+          "geometry": {
+            "type": "mesh",
+            "filename": "spot/hl.uleg.obj",
+            "scale": [1, 1, 1]
+          },
+          "origin": {
+            "xyz": [0.0, 0.0, 0.0],
+            "rpy": [0.0, 0.0, 0.0]
+          },
+          "material": {
+            "name": "hl.uleg",
+            "color": [1.0, 0.8431, 0.0, 1.0]
+          }
+        }
+      ]
+    },
+    {
+      "name": "hl.lleg",
+      "visuals": [
+        {
+          "geometry": {
+            "type": "mesh",
+            "filename": "spot/hl.lleg.obj",
+            "scale": [1, 1, 1]
+          },
+          "origin": {
+            "xyz": [0.0, 0.0, 0.0],
+            "rpy": [0.0, 0.0, 0.0]
+          },
+          "material": {
+            "name": "hl.lleg",
+            "color": [0.2, 0.2, 0.2, 1.0]
+          }
+        }
+      ]
+    },
+    {
+      "name": "hr.hip",
+      "visuals": [
+        {
+          "geometry": {
+            "type": "mesh",
+            "filename": "spot/hr.hip.obj",
+            "scale": [1, 1, 1]
+          },
+          "origin": {
+            "xyz": [0.0, 0.0, 0.0],
+            "rpy": [0.0, 0.0, 0.0]
+          },
+          "material": {
+            "name": "hr.hip",
+            "color": [0.2, 0.2, 0.2, 1.0]
+          }
+        }
+      ]
+    },
+    {
+      "name": "hr.uleg",
+      "visuals": [
+        {
+          "geometry": {
+            "type": "mesh",
+            "filename": "spot/hr.uleg.obj",
+            "scale": [1, 1, 1]
+          },
+          "origin": {
+            "xyz": [0.0, 0.0, 0.0],
+            "rpy": [0.0, 0.0, 0.0]
+          },
+          "material": {
+            "name": "hr.uleg",
+            "color": [1.0, 0.8431, 0.0, 1.0]
+          }
+        }
+      ]
+    },
+    {
+      "name": "hr.lleg",
+      "visuals": [
+        {
+          "geometry": {
+            "type": "mesh",
+            "filename": "spot/hr.lleg.obj",
+            "scale": [1, 1, 1]
+          },
+          "origin": {
+            "xyz": [0.0, 0.0, 0.0],
+            "rpy": [0.0, 0.0, 0.0]
+          },
+          "material": {
+            "name": "hr.lleg",
+            "color": [0.2, 0.2, 0.2, 1.0]
+          }
+        }
+      ]
+    }
+  ],
+  "joints": [
+    {
+      "name": "fl.hx",
+      "type": "revolute",
+      "parent": "base",
+      "child": "fl.hip",
+      "origin": {
+        "xyz": [0.29785, 0.055, 0.0],
+        "rpy": [0.0, 0.0, 0.0]
+      },
+      "axis": [1.0, 0.0, 0.0],
+      "limits": {
+        "effort": 1000.0,
+        "velocity": 1000.0,
+        "lower": -0.7853981633974483,
+        "upper": 0.7853981633974483
+      }
+    },
+    {
+      "name": "fl.hy",
+      "type": "revolute",
+      "parent": "fl.hip",
+      "child": "fl.uleg",
+      "origin": {
+        "xyz": [0.0, 0.1108, 0.0],
+        "rpy": [0.0, 0.0, 0.0]
+      },
+      "axis": [0.0, 1.0, 0.0],
+      "limits": {
+        "effort": 1000.0,
+        "velocity": 1000.0,
+        "lower": -0.8988445647770796,
+        "upper": 2.2951079663725436
+      }
+    },
+    {
+      "name": "fl.kn",
+      "type": "revolute",
+      "parent": "fl.uleg",
+      "child": "fl.lleg",
+      "origin": {
+        "xyz": [0.025, 0.0, -0.32],
+        "rpy": [0.0, 0.0, 0.0]
+      },
+      "axis": [0.0, 1.0, 0.0],
+      "limits": {
+        "effort": 1000.0,
+        "velocity": 1000.0,
+        "lower": -2.7929,
+        "upper": -0.254402
+      }
+    },
+    {
+      "name": "fr.hx",
+      "type": "revolute",
+      "parent": "base",
+      "child": "fr.hip",
+      "origin": {
+        "xyz": [0.29785, -0.055, 0.0],
+        "rpy": [0.0, 0.0, 0.0]
+      },
+      "axis": [1.0, 0.0, 0.0],
+      "limits": {
+        "effort": 1000.0,
+        "velocity": 1000.0,
+        "lower": -0.7853981633974483,
+        "upper": 0.7853981633974483
+      }
+    },
+    {
+      "name": "fr.hy",
+      "type": "revolute",
+      "parent": "fr.hip",
+      "child": "fr.uleg",
+      "origin": {
+        "xyz": [0.0, -0.1108, 0.0],
+        "rpy": [0.0, 0.0, 0.0]
+      },
+      "axis": [0.0, 1.0, 0.0],
+      "limits": {
+        "effort": 1000.0,
+        "velocity": 1000.0,
+        "lower": -0.898845,
+        "upper": 2.24363
+      }
+    },
+    {
+      "name": "fr.kn",
+      "type": "revolute",
+      "parent": "fr.uleg",
+      "child": "fr.lleg",
+      "origin": {
+        "xyz": [0.025, 0.0, -0.32],
+        "rpy": [0.0, 0.0, 0.0]
+      },
+      "axis": [0.0, 1.0, 0.0],
+      "limits": {
+        "effort": 1000.0,
+        "velocity": 1000.0,
+        "lower": -2.7929,
+        "upper": -0.255648
+      }
+    },
+    {
+      "name": "hl.hx",
+      "type": "revolute",
+      "parent": "base",
+      "child": "hl.hip",
+      "origin": {
+        "xyz": [-0.29785, 0.055, 0.0],
+        "rpy": [0.0, 0.0, 0.0]
+      },
+      "axis": [1.0, 0.0, 0.0],
+      "limits": {
+        "effort": 1000.0,
+        "velocity": 1000.0,
+        "lower": -0.7853981633974483,
+        "upper": 0.7853981633974483
+      }
+    },
+    {
+      "name": "hl.hy",
+      "type": "revolute",
+      "parent": "hl.hip",
+      "child": "hl.uleg",
+      "origin": {
+        "xyz": [0.0, 0.1108, 0.0],
+        "rpy": [0.0, 0.0, 0.0]
+      },
+      "axis": [0.0, 1.0, 0.0],
+      "limits": {
+        "effort": 1000.0,
+        "velocity": 1000.0,
+        "lower": -0.8988445647770796,
+        "upper": 2.2951079663725436
+      }
+    },
+    {
+      "name": "hl.kn",
+      "type": "revolute",
+      "parent": "hl.uleg",
+      "child": "hl.lleg",
+      "origin": {
+        "xyz": [0.025, 0.0, -0.32],
+        "rpy": [0.0, 0.0, 0.0]
+      },
+      "axis": [0.0, 1.0, 0.0],
+      "limits": {
+        "effort": 1000.0,
+        "velocity": 1000.0,
+        "lower": -2.7929,
+        "upper": -0.247067
+      }
+    },
+    {
+      "name": "hr.hx",
+      "type": "revolute",
+      "parent": "base",
+      "child": "hr.hip",
+      "origin": {
+        "xyz": [-0.29785, -0.055, 0.0],
+        "rpy": [0.0, 0.0, 0.0]
+      },
+      "axis": [1.0, 0.0, 0.0],
+      "limits": {
+        "effort": 1000.0,
+        "velocity": 1000.0,
+        "lower": -0.7853981633974483,
+        "upper": 0.7853981633974483
+      }
+    },
+    {
+      "name": "hr.hy",
+      "type": "revolute",
+      "parent": "hr.hip",
+      "child": "hr.uleg",
+      "origin": {
+        "xyz": [0.0, -0.1108, 0.0],
+        "rpy": [0.0, 0.0, 0.0]
+      },
+      "axis": [0.0, 1.0, 0.0],
+      "limits": {
+        "effort": 1000.0,
+        "velocity": 1000.0,
+        "lower": -0.8988445647770796,
+        "upper": 2.2951079663725436
+      }
+    },
+    {
+      "name": "hr.kn",
+      "type": "revolute",
+      "parent": "hr.uleg",
+      "child": "hr.lleg",
+      "origin": {
+        "xyz": [0.025, 0.0, -0.32],
+        "rpy": [0.0, 0.0, 0.0]
+      },
+      "axis": [0.0, 1.0, 0.0],
+      "limits": {
+        "effort": 1000.0,
+        "velocity": 1000.0,
+        "lower": -2.7929,
+        "upper": -0.248282
+      }
+    }
+  ]
+}

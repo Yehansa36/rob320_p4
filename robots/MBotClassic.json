@@ -1,0 +1,166 @@
+{
+  "name": "mbot_classic",
+  "links": [
+    {
+      "name": "base_footprint"
+    },
+    {
+      "name": "base_link",
+      "visuals": [
+        {
+          "geometry": {
+            "type": "mesh",
+            "filename": "mbot_classic/mbot-classic-simplified.obj",
+            "scale": [1, 1, 1]
+          },
+          "origin": {
+            "xyz": [-0.04, -0.115, 0.005],
+            "rpy": [0.0, 0.0, 0.0]
+          }
+        }
+      ],
+      "collisions": [
+        {
+          "geometry": {
+            "type": "box",
+            "size": [0.18, 0.13, 0.095]
+          },
+          "origin": {
+            "xyz": [-0.04, -0.115, 0.005],
+            "rpy": [0.0, 0.0, 0.0]
+          }
+        }
+      ]
+    },
+    {
+      "name": "camera"
+    },
+    {
+      "name": "left_wheel_link",
+      "visuals": [
+        {
+          "geometry": {
+            "type": "mesh",
+            "filename": "mbot_classic/wheel_l.stl",
+            "scale": [0.001, 0.001, 0.001]
+          },
+          "origin": {
+            "xyz": [0.0, 0.0, 0.0115],
+            "rpy": [0.0, 0.0, 0.0]
+          },
+          "material": {
+            "name": "black"
+          }
+        }
+      ],
+      "collisions": [
+        {
+          "geometry": {
+            "type": "cylinder",
+            "length": 0.024,
+            "radius": 0.042
+          },
+          "origin": {
+            "xyz": [0.0, 0.0, 0.0115],
+            "rpy": [0.0, 0.0, 0.0]
+          }
+        }
+      ]
+    },
+    {
+      "name": "right_wheel_link",
+      "visuals": [
+        {
+          "geometry": {
+            "type": "mesh",
+            "filename": "mbot_classic/wheel_r.stl",
+            "scale": [0.001, 0.001, 0.001]
+          },
+          "origin": {
+            "xyz": [0.0, 0.0, 0.0115],
+            "rpy": [0.0, 0.0, 0.0]
+          },
+          "material": {
+            "name": "black"
+          }
+        }
+      ],
+      "collisions": [
+        {
+          "geometry": {
+            "type": "cylinder",
+            "length": 0.024,
+            "radius": 0.042
+          },
+          "origin": {
+            "xyz": [0.0, 0.0, 0.0115],
+            "rpy": [0.0, 0.0, 0.0]
+          }
+        }
+      ]
+    },
+    {
+      "name": "lidar_link"
+    }
+  ],
+  "joints": [
+    {
+      "name": "base_joint",
+      "type": "fixed",
+      "parent": "base_footprint",
+      "child": "base_link",
+      "origin": {
+        "xyz": [0.0, 0.0, 0.042],
+        "rpy": [0.0, 0.0, 0.0]
+      }
+    },
+    {
+      "name": "camera_joint",
+      "type": "fixed",
+      "parent": "base_link",
+      "child": "camera",
+      "origin": {
+        "xyz": [0.05751, 0.0, 0.02936],
+        "rpy": [-1.57, 0.0, -1.57]
+      }
+    },
+    {
+      "name": "left_wheel_joint",
+      "type": "continuous",
+      "parent": "base_link",
+      "child": "left_wheel_link",
+      "origin": {
+        "xyz": [0.0, 0.085, 0.0],
+        "rpy": [-1.5708, 0.0, 0.0]
+      },
+      "axis": [0.0, 0.0, 1.0]
+    },
+    {
+      "name": "right_wheel_joint",
+      "type": "continuous",
+      "parent": "base_link",
+      "child": "right_wheel_link",
+      "origin": {
+        "xyz": [0.0, -0.085, 0.0],
+        "rpy": [1.5708, 0.0, 0.0]
+      },
+      "axis": [0.0, 0.0, -1.0]
+    },
+    {
+      "name": "lidar_joint",
+      "type": "fixed",
+      "parent": "base_link",
+      "child": "lidar_link",
+      "origin": {
+        "xyz": [0.0, 0.0, 0.14179],
+        "rpy": [0.0, 0.0, 3.14]
+      }
+    }
+  ],
+  "materials": [
+    {
+      "name": "black",
+      "color": [0.2, 0.2, 0.2, 1.0]
+    }
+  ]
+}
