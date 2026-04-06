@@ -57,55 +57,34 @@ bool FrameGraph::update(const rix::msg::geometry::TF &tf) {
 
 /**< TODO: Implement the update method. */
 bool FrameGraph::update(const rix::msg::geometry::TransformStamped &transform) {
-    const std::string& parent_frame = transform.header.frame_id;
+   const std::string& parent_frame = transform.header.frame_id;
     const std::string& child_frame = transform.child_frame_id;
-    
-    // REQUIREMENT 1: Parent frame MUST exist
-    // This keeps the graph connected!
-    if (!exists(parent_frame)) {
-        return false;  // Can't add transform if parent doesn't exist
-    }
-    
-    // REQUIREMENT 2: Get or create child frame
+
+    if (!exists(parent_frame)) return false;
+
+    int child_index;
     if (!exists(child_frame)) {
-        // Create new frame
-        int child_index = frames_.size();
-        
-        // Create Frame with same duration as root frame
-        frames_.push_back(Frame(child_frame, frames_[0].buffer.duration()));
-        
-        // Expand graph with empty vector for this new frame
-        graph_.push_back(std::vector<int>());
-        
-        // Map name to index for fast lookup
+        child_index = frames_.size();
+        frames_.emplace_back(child_frame, frames_[0].buffer.duration());
+        graph_.push_back({});
         name_to_index_[child_frame] = child_index;
-    }
-    
-    int child_index = name_to_index_[child_frame];
-    int parent_index = name_to_index_[parent_frame];
-    
-    // REQUIREMENT 3: Frames can't have multiple parents!
-    if (graph_[child_index].size() > 0) {
-        // Child already exists with a parent
-        int existing_parent = graph_[child_index][0];
-        if (existing_parent != parent_index) {
-            // Different parent than before - NOT ALLOWED
-            return false;
-        }
-        // Otherwise, same parent - just update transform
     } else {
-        // First time setting this child's parent
-        // Add parent as first element of child's vector
+        child_index = name_to_index_[child_frame];
+    }
+
+    int parent_index = name_to_index_[parent_frame];
+
+    if (!graph_[child_index].empty()) {
+        int existing_parent = graph_[child_index][0];
+        if (existing_parent != parent_index) return false;
+    } else {
         graph_[child_index].push_back(parent_index);
-        
-        // Add child to parent's children list
         graph_[parent_index].push_back(child_index);
     }
-    
-    // Insert the transform into child frame's buffer
-    // This overwrites if same timestamp, or adds if new timestamp
+
     rix::util::Time msg_time(transform.header.stamp.sec, transform.header.stamp.nsec);
-    frames_[child_index].buffer.insert(msg_time, transform.transform);    
+    frames_[child_index].buffer.insert(msg_time, transform.transform); // insert will overwrite duplicates
+
     return true;
 }
 
@@ -116,78 +95,49 @@ bool FrameGraph::get_transform(const std::string &target_frame, const std::strin
     if (target_frame == source_frame) {
         transform.header.frame_id = source_frame;
         transform.child_frame_id = target_frame;
-        // Identity transform (no movement)
         transform.transform = rix::robot::eigen_to_msg(Eigen::Affine3d::Identity());
-        //transform.header.stamp = time;
         return true;
     }
-    
-    // Find source and target frames in the graph
+
     auto it_source = find(source_frame);
     auto it_target = find(target_frame);
-    
-    if (it_source == end() || it_target == end()) {
-        return false;  // One or both frames don't exist
-    }
-    
-    // Find their nearest common ancestor
+
+    if (it_source == end() || it_target == end()) return false;
+
     auto it_ancestor = find_nearest_ancestor(it_source, it_target);
-    if (it_ancestor == end()) {
-        return false;  // No common ancestor (shouldn't happen)
-    }
-    
-    // BUILD CHAIN 1: source → ancestor
-    // We build this by traversing up from source to ancestor
+    if (it_ancestor == end()) return false;
+
     Eigen::Affine3d T_ancestor_source = Eigen::Affine3d::Identity();
-    
-    auto it = it_source;
-    while (it != it_ancestor) {
-        // Get transform from this frame to its parent
+    for (auto it = it_source; ; ) {
         rix::msg::geometry::Transform child_transform;
-        if (!it->buffer.get(time, child_transform)) {
-            return false;  // Couldn't get transform for this time
-        }
-        
-        // Convert to Eigen for matrix multiplication
+        if (!it->buffer.get(time, child_transform)) return false;
         Eigen::Affine3d T_child = rix::robot::msg_to_eigen(child_transform);
-        
-        // Accumulate: T_ancestor_source = T_child * T_ancestor_source
-        // This builds the chain from child up to ancestor
-        T_ancestor_source = T_child * T_ancestor_source;
-        
-        --it;  // Move to parent
+
+        T_ancestor_source = T_ancestor_source * T_child;
+
+        if (it == it_ancestor) break;
+        --it;
     }
-    
-    // BUILD CHAIN 2: target → ancestor (then invert)
+
     Eigen::Affine3d T_target_ancestor = Eigen::Affine3d::Identity();
-    
-    it = it_target;
-    while (it != it_ancestor) {
-        // Get transform from this frame to its parent
+    for (auto it = it_target; ; ) {
         rix::msg::geometry::Transform child_transform;
-        if (!it->buffer.get(time, child_transform)) {
-            return false;
-        }
-        
+        if (!it->buffer.get(time, child_transform)) return false;
         Eigen::Affine3d T_child = rix::robot::msg_to_eigen(child_transform);
-        T_target_ancestor = T_child * T_target_ancestor;
-        
-        --it;  // Move to parent
+
+        T_target_ancestor = T_target_ancestor * T_child;
+
+        if (it == it_ancestor) break;
+        --it;
     }
-    
-    // Invert: T_ancestor_target = (T_target_ancestor)^-1
+
     Eigen::Affine3d T_ancestor_target = T_target_ancestor.inverse();
-    
-    // COMBINE: T_target_source = T_ancestor_target * T_ancestor_source
-    // This gives us the transform from source → target
     Eigen::Affine3d T_target_source = T_ancestor_target * T_ancestor_source;
-    
-    // Package result
+
     transform.header.frame_id = source_frame;
     transform.child_frame_id = target_frame;
     transform.transform = rix::robot::eigen_to_msg(T_target_source);
-    //transform.header.stamp = time;
-    
+
     return true;
 }
 
@@ -202,42 +152,39 @@ FrameGraph::Iterator FrameGraph::find(const std::string &name) const {
 /**< TODO: Implement the find_nearest_ancestor method. */
 FrameGraph::Iterator FrameGraph::find_nearest_ancestor(Iterator frame_a, Iterator frame_b) const {
     // Special case: if frames are identical, they're their own ancestor
-    if (frame_a == frame_b) {
-        return frame_a;
-    }
-    
-    // Collect all ancestors of frame_a by traversing up
+   if (frame_a == frame_b) return frame_a;
+
+    // Collect all ancestors of frame_a including itself
     std::set<int> ancestors_a;
-    auto it = frame_a;
-    while (it != end()) {
+    for (auto it = frame_a; it != end(); ) {
         ancestors_a.insert(it.index_);
-        --it;  // Move to parent (operator-- is defined)
+        if (it.index_ == 0) break;  // reached root
+        --it;
     }
-    
-    // Now traverse up from frame_b until we find a common ancestor
-    auto it_b = frame_b;
-    while (it_b != end()) {
-        if (ancestors_a.find(it_b.index_) != ancestors_a.end()) {
-            // Found a frame that's in both paths!
-            return it_b;
+
+    // Traverse frame_b ancestors until we find a common one
+    for (auto it = frame_b; it != end(); ) {
+        if (ancestors_a.find(it.index_) != ancestors_a.end()) {
+            return it;  // first common ancestor
         }
-        --it_b;  // Move to parent
+        if (it.index_ == 0) break;  // reached root
+        --it;
     }
-    
-    // No common ancestor found (shouldn't happen in a connected tree)
-    return end();
+
+    return end();  // no common ancestor (shouldn't happen)
 }
 
 FrameGraph::Iterator FrameGraph::find_nearest_ancestor(const std::string &frame_a, const std::string &frame_b) const {
+     // Convert string names to iterators
     auto it_a = find(frame_a);
-    if (it_a == end()) {
-        return end();
-    }
     auto it_b = find(frame_b);
-    if (it_b == end()) {
-        return end();
-    }
+
+    // If either frame doesn't exist, return end()
+    if (it_a == end() || it_b == end()) return end();
+
+    // Use the iterator-based method to find nearest ancestor
     return find_nearest_ancestor(it_a, it_b);
+
 }
 
 FrameGraph::Iterator::Iterator(const Iterator &other) : graph_(other.graph_), index_(other.index_) {}
