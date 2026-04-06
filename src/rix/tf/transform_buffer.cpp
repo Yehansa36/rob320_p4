@@ -52,9 +52,14 @@ void TransformBuffer::insert(const rix::util::Time &time, const rix::msg::geomet
         }
     );
     
-    // Step 3: Insert at the correct position
-    // O(1) amortized for insertions at the end (typical case)
-    buffer_.insert(it, std::make_pair(time, transform));
+    // Step 3: Check for duplicate timestamp
+    if (it != buffer_.end() && it->first == time) {
+        // Duplicate timestamp → overwrite existing transform
+        it->second = transform;
+    } else {
+        // New timestamp → insert at correct position
+        buffer_.insert(it, std::make_pair(time, transform));
+    }
 }
 
 /*< TODO: Implement the get method. */
