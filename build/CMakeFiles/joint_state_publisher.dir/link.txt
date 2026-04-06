@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/joint_state_publisher.dir/src/joint_state_publisher/joint_state_publisher.cpp.o CMakeFiles/joint_state_publisher.dir/src/joint_state_publisher/main.cpp.o -o joint_state_publisher  libproject4.a ../lib/linux-aarch64/libproject3.a ../lib/linux-aarch64/libproject2.a ../lib/linux-aarch64/libproject1.a 

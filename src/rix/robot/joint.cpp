@@ -113,6 +113,29 @@ const rix::msg::geometry::Transform &Joint::origin() const { return origin_; }
 
 /**< TODO: Implement transform method. */
 rix::msg::geometry::Transform Joint::transform() const {
+    Eigen::Vector3d axis = rix::robot::msg_to_eigen(axis_);
+    Eigen::Affine3d origin_transform = rix::robot::msg_to_eigen(origin_);
+    
+    Eigen::Affine3d joint_transform = Eigen::Affine3d::Identity();
+    
+    if (type_ == Type::REVOLUTE || type_ == Type::CONTINUOUS) {
+        // REVOLUTE/CONTINUOUS: Rotate around axis by position_ (in radians)
+        // Example: shoulder joint rotates around Y-axis by position_
+        Eigen::AngleAxisd angle_axis(position_, axis.normalized());
+        joint_transform.rotate(angle_axis);
+    } else if (type_ == Type::PRISMATIC) {
+        // PRISMATIC: Translate along axis by position_ (in meters/units)
+        // Example: wrist joint moves along X-axis by position_
+        joint_transform.translation() = position_ * axis.normalized();
+    }
+    // FIXED type: no transformation (identity)
+    
+    // Combine: origin_transform → joint_movement
+    // The joint's origin is applied first, then the rotation/translation
+    Eigen::Affine3d result = origin_transform * joint_transform;
+    
+    // Convert back to message format
+    return rix::robot::eigen_to_msg(result);
     return {};
 }
 

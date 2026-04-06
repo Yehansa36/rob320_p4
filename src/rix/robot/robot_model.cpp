@@ -5,6 +5,9 @@
 
 #include "rix/robot/eigen_util.hpp"
 
+#include <set>
+#include <algorithm>
+
 using Json = nlohmann::json;
 
 namespace rix {
@@ -119,17 +122,105 @@ std::vector<std::shared_ptr<Link>> RobotModel::get_end_effectors() const {
 
 /**< TODO: Implement the get_joints_in_chain method */
 std::vector<std::shared_ptr<Joint>> RobotModel::get_joints_in_chain(const std::string &link_name) const {
-    return {};
+     std::vector<std::shared_ptr<Joint>> chain;
+    
+    // Find the joint that connects to this link (this is the last joint in chain)
+    std::shared_ptr<Joint> current_joint = nullptr;
+    for (const auto& [name, joint] : joints) { 
+        if (joint->child() == link_name) {
+            current_joint = joint;
+            break;
+        }
+    }
+    
+    // If link not found, return empty chain
+    if (!current_joint) {
+        return chain;
+    }
+    
+    // Traverse backwards from link to root
+    chain.push_back(current_joint);
+    std::string parent_link = current_joint->parent();
+    
+    // Stop when we reach the root
+    while (parent_link != root) {
+        // Find joint connecting to this parent_link
+        std::shared_ptr<Joint> parent_joint = nullptr;
+        for (const auto& [name, joint] : joints) {  
+            if (joint->child() == parent_link) {
+                parent_joint = joint;
+                break;
+            }
+        }
+        
+        // If we can't find the parent joint, stop
+        if (!parent_joint) break;
+        
+        chain.push_back(parent_joint);
+        parent_link = parent_joint->parent();
+    }
+    
+    // Reverse to get root-to-link order
+    std::reverse(chain.begin(), chain.end());
+    
+    return chain;
 }
 
 /**< TODO: Implement the get_transforms method */
 rix::msg::geometry::TF RobotModel::get_transforms() const {
-    return {};
+    rix::msg::geometry::TF tf;
+    
+    // Add world → root transform
+    rix::msg::geometry::TransformStamped world_to_root_ts;
+    world_to_root_ts.header.frame_id = "world";
+    world_to_root_ts.child_frame_id = root;
+    world_to_root_ts.transform = world_to_root;
+    //world_to_root_ts.header.stamp = rix::util::Time::now();
+    tf.transforms.push_back(world_to_root_ts);
+    
+    // Add transforms for all joints in proper order (parent before child)
+    std::set<std::string> added_links = {"world", root};
+    
+    bool added_new = true;
+    while (added_new && added_links.size() < (links.size() + 2)) {
+        added_new = false;
+        
+        for (const auto& [name, joint] : joints) {  
+            if (added_links.find(joint->parent()) == added_links.end()) {
+                continue;
+            }
+            
+            // Check if child already added (avoid duplicates)
+            if (added_links.find(joint->child()) != added_links.end()) {
+                continue;  // Child already added
+            }
+            
+            // Create and add transform for this joint
+            rix::msg::geometry::TransformStamped transform;
+            transform.header.frame_id = joint->parent();
+            transform.child_frame_id = joint->child();
+            transform.transform = joint->transform();
+            //transform.header.stamp = rix::util::Time::now();
+            
+            tf.transforms.push_back(transform);
+            added_links.insert(joint->child());
+            added_new = true;
+        }
+    }
+    
+    return tf;
 }
 
 /**< TODO: Implement the get_joint_states method */
 rix::msg::sensor::JS RobotModel::get_joint_states() const {
-    return {};
+    rix::msg::sensor::JS js;
+    
+    // Add joint state for each joint
+    for (const auto& [name, joint] : joints) {  
+        js.joint_states.push_back(joint->get_state());
+    }
+    
+    return js;
 }
 
 rix::msg::geometry::TF RobotModel::get_static_transforms() const {

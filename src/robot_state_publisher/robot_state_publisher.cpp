@@ -36,5 +36,59 @@ RobotStatePublisher::RobotStatePublisher(const rix::ipc::Endpoint& rixhub_endpoi
 
 /**< TODO: Implement joint_state_callback method */
 void RobotStatePublisher::joint_state_callback(const rix::msg::sensor::JS& msg) {
-    return;
+    // Case 1: Ignore timestamps mode
+    // Publish every time we get a message
+    rix::util::Time current_time(msg.stamp.sec, msg.stamp.nsec);
+    if (ignore_timestamps_) {
+        // Update robot model with new joint states
+        for (const auto& joint_state : msg.joint_states) {
+            auto joint = robot_->get_joint(joint_state.name);
+            if (joint) {
+                joint->set_state(joint_state);
+            }
+        }
+        
+        // Get transforms for each joint based on new state
+        rix::msg::geometry::TF tf = robot_->get_transforms();
+        
+        // Broadcast transforms immediately
+        tf_broadcaster_.send(tf);
+        
+        // Update last publish time
+        //last_publish_time_ = msg.stamp;
+        last_publish_time_ = current_time;
+        return;
+    }
+    
+    // Case 2: Rate-limited mode (default)
+    // Only publish if enough time has passed
+    
+    // Calculate time since last publish
+    //rix::util::Duration time_since_publish = msg.stamp - last_publish_time_;
+    rix::util::Duration time_since_publish = current_time - last_publish_time_;
+
+    // If we haven't waited long enough, skip publishing
+    if (time_since_publish < period_) {
+        // Not enough time, return without publishing
+        return;
+    }
+    
+    // Enough time has passed, update and publish
+    
+    // Update robot model with new joint states
+    for (const auto& joint_state : msg.joint_states) {
+        auto joint = robot_->get_joint(joint_state.name);
+        if (joint) {
+            joint->set_state(joint_state);
+        }
+    }
+    
+    // Get transforms for each joint based on new state
+    rix::msg::geometry::TF tf = robot_->get_transforms();
+    
+    // Broadcast transforms
+    tf_broadcaster_.send(tf);
+    
+    // Record the time of this publish
+    last_publish_time_ = current_time;
 }

@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/robot_state_publisher.dir/src/robot_state_publisher/robot_state_publisher.cpp.o CMakeFiles/robot_state_publisher.dir/src/robot_state_publisher/main.cpp.o -o robot_state_publisher  libproject4.a ../lib/linux-aarch64/libproject3.a ../lib/linux-aarch64/libproject2.a ../lib/linux-aarch64/libproject1.a 

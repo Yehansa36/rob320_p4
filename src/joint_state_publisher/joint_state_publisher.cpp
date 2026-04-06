@@ -46,10 +46,27 @@ JointStatePublisher::JointStatePublisher(const rix::ipc::Endpoint &rixhub_endpoi
 
 /**< TODO: Implement the joint_state_callback method. */
 void JointStatePublisher::joint_state_callback(const rix::msg::sensor::JS &msg) {
-    return;
+    // Update the robot model with the new joint states from the message
+    
+    // Iterate through each joint state in the message
+    for (const auto& joint_state : msg.joint_states) {
+        // Find the corresponding joint in the robot model
+        auto joint = robot_->get_joint(joint_state.name);
+        
+        if (joint) {
+            // Update the joint with position, velocity, and effort
+            // The joint will handle mimic joints correctly
+            joint->set_state(joint_state);
+        }
+    }
 }
 
 /**< TODO: Implement the timer_callback method. */
 void JointStatePublisher::timer_callback(const rix::core::Timer::Event &event) {
-    return;
+   // Get current state of all joints from robot model
+    rix::msg::sensor::JS joint_states = robot_->get_joint_states();
+    
+    // Publish to the /joint_states topic
+    // This combines all input joint states into a single message
+    joint_state_pub_->publish(joint_states);
 } 
