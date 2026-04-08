@@ -113,15 +113,22 @@ const rix::msg::geometry::Transform &Joint::origin() const { return origin_; }
 
 /**< TODO: Implement transform method. */
 rix::msg::geometry::Transform Joint::transform() const {
-     Eigen::Vector3d axis = rix::robot::msg_to_eigen(axis_);
-    Eigen::Affine3d joint_transform = Eigen::Affine3d::Identity();
+     Eigen::Affine3d joint_transform = Eigen::Affine3d::Identity();
+
+    Eigen::Vector3d axis = rix::robot::msg_to_eigen(axis_);
+    if (axis.norm() > 0.0) {
+        axis.normalize();
+    }
+
+    double joint_position = is_mimic() ? 0.0 : position();
 
     if (type_ == Type::REVOLUTE || type_ == Type::CONTINUOUS) {
-         Eigen::AngleAxisd angle_axis(position_, axis.normalized());
-        joint_transform.rotate(angle_axis);
+        joint_transform = Eigen::Affine3d(
+            Eigen::AngleAxisd(joint_position, axis)
+        );
     } 
     else if (type_ == Type::PRISMATIC) {
-        joint_transform.translation() = position_ * axis.normalized();
+        joint_transform = Eigen::Translation3d(joint_position * axis);
     }
 
     return rix::robot::eigen_to_msg(joint_transform);
